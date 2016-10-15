@@ -1,0 +1,40 @@
+#readme {
+  margin-bottom: 10px;
+}
+
+.rec-group {
+  padding: 30px;
+  position: relative;
+  margin-bottom: 30px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.rec-group svg {
+  margin-right: 0.3em;
+}
+
+.rec-group [itemprop='name'] {
+  /*float: left;*/
+}
+
+.rec-group.sep {
+  text-align: center;
+}
+
+.rec-group [itemprop='description'] {
+  /*float: right;*/
+}
+
+.rec-group > h2 {
+  padding-bottom: 0.3em;
+  margin-bottom: 0.6em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #eee;
+}
+
+.rec-group > div {
+  margin-bottom: 0.2em;
+}
