@@ -12,5 +12,8 @@
       "js" : ["recommend.js"]
     }
   ],
+  "web_accessible_resources" : [
+    "github_APITOKEN"
+  ],
   "manifest_version": 2
 }
