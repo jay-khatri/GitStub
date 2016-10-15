@@ -1,6 +1,8 @@
 express = require('express');
 var app = express();
+var https = require('https');
 var request = require('request');
+var options={};
 
 app.get('/recommend', function (req, res) {
 	console.log(req.query.repo);
@@ -16,6 +18,6 @@ app.get('/recommend', function (req, res) {
 	}
 });
 
-app.listen(3000, function () {
-	console.log('Example app listening on port 3000!');
-});module.exports = app;
+https.createServer(options, app).listen(3000);
+
+		
