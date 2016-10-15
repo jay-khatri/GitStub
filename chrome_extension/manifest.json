@@ -1,0 +1,16 @@
+{
+  "name": "github-recommendations",
+  "description": "Recommends GitHub projects",
+  "version": "0.1",
+  "permissions": [
+    "tabs",
+    "*://*.github.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches" : [ "*://*.github.com/*" ],
+      "js" : ["recommend.js"]
+    }
+  ],
+  "manifest_version": 2
+}
