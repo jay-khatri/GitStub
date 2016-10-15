@@ -1,4 +1,35 @@
-var reponame1 = "jay-khatri/Hack-Rice";
+var reponame1 = "robbyrussell/oh-my-zsh";
+
+function cal_score(repo){
+	fork_w = 5;
+	star_w = 5;
+	watch_w = 5;
+	fork = repo['forks_count'] * fork_w;
+	star = repo['stargazers_count'] * star_w;
+	watch = repo['watchers_count'] * watch_w;
+	return (fork + star + watch);
+};
+	
+
+function get_toprepos(contrib_repos){
+	//console.log(contrib_repos);
+	var best_repos = [];
+	contrib_repos.forEach(function(contrib_repo){
+		//gets only the repos from the list
+		repos = contrib_repo['repos'];
+		//console.log(repos);
+		var contrib_topscore = 0;
+		var contrib_best = {};
+		repos.forEach(function(repo){
+			if (cal_score(repo) >= contrib_topscore){
+					contrib_topscore = cal_score(repo);
+					contrib_best = repo;
+			}
+		});
+		best_repos.push(contrib_best['name']);
+	});
+	console.log(best_repos);
+};
 
 
 //get contributers of a given repo name
@@ -27,15 +58,16 @@ function get_repos(contribs){
             var obj = {};
             obj['login'] = contrib.login;
             obj['id'] = contrib.id;
-            obj[contrib.login] = contrib_repos;
+            obj['repos'] = contrib_repos;
       repos.push(obj);
       processed_count++;
-      if (processed_count == contribs.length) {
-        // done processing, do something else
-		console.log(repos);
-			  //here, call the new function that gives a score.
-      }
-        });
+			  if (processed_count == contribs.length) {
+				// done processing, do something else
+				//console.log(repos);
+				get_toprepos(repos);
+				//here, call the new function that gives a score.
+			  }
+      });
     xhr.send();
     });
 };
@@ -43,20 +75,3 @@ function get_repos(contribs){
 
 var contribs = get_contribs(reponame1);
 
-
-/*
-When all of the requests created by the above forEach() complete, then the repos object will look like:
-
-repos = [
-    {
-    login: octocat,
-    id: 1,
-    repos: [ {...}, {...} ]
-  },
-    {
-    id: 2,
-    login: batman,
-    repos: [ {...} ]
-  }
-]
-*/
