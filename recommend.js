@@ -7,14 +7,19 @@ THUMBSNODE.innerHTML = THUMBSUPSVG;
 
 var APIKEY;
 (function() {
-  if(document.querySelectorAll(".repository-content").length > 0) {
+  if(document.querySelector("body.page-profile") != null) {
+    console.log("Yo we're on a profile page");
+  }
+  if(document.querySelector(".repository-content") != null) {
     var reponame = document.location.href.split(".com/").pop().match(/[^/]+\/[^/]+/).pop();
     console.log("Retrieving info for repository " + reponame);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
     xhr.addEventListener('load', function() {
       APIKEY = xhr.responseText.trim();
-    	get_contribs(reponame, function(best) { addRecs(best); });
+    	get_contribs(reponame, function(best) {
+        addRecs(best);
+      });
     });
     xhr.send();
   }
@@ -29,17 +34,29 @@ function recNode(url, title, desc) {
 }
 
 function addRecs(recs) {
-  var readme = document.querySelector("#readme");
+  recs = recs.sort(function(a,b){
+    if (a.score < b.score) {
+      return 1;
+    } else if (a.score > b.score) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+  var anchor = document.querySelector("#readme");
+  if (!anchor) { // There is no readme
+    anchor = document.querySelector(".file-wrap");
+  }
   var recbox = document.createElement("div");
   recbox.id = "recbox";
   recbox.innerHTML = "<h2>You might also enjoy...</h2>";
   recbox.classList += 'rec-group';
-  insertAfter(readme, recbox);
+  insertAfter(anchor, recbox);
   recs.forEach(function(rec,i) {
     if(i > MAXRECS-1) {
       return;
     }
-    recbox.appendChild(recNode(rec.html_url, rec.full_name, rec.description));
+    recbox.appendChild(recNode(rec.html_url, rec.full_name, rec.description != null ? rec.description : "No description available" ));
   });
 }
 
