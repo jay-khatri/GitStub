@@ -25,7 +25,7 @@
 .rec-group [itemprop='name'] {
   /*float: left;*/
   display: inline-block;
-  min-width: 28%;
+  min-width: 30%;
 }
 
 .rec-group.sep {
@@ -38,7 +38,8 @@
   /*float: left;*/
 }
 
-.rec-group > h2 {
+#rec-flavor {
+  margin: 0px;
   padding-bottom: 0.3em;
   margin-bottom: 0.6em;
   font-size: 1.5em;
