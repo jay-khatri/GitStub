@@ -20,11 +20,13 @@ WOWNODE.innerHTML = WOWSVG;
 
 var EMOJILIST = [HEARTEYESNODE, AOKAYNODE, WOWNODE];
 
-var RECBOX = makeRecbox();
+var RECBOX;
 
 var APIKEY;
 (function() {
   if(document.querySelector("body.page-profile") != null) {
+    var anchor = document.querySelector(".js-repo-filter");
+    RECBOX = makeRecbox(anchor);
     var username = document.location.href.split(".com/").pop().match(/[^/]+/).pop();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
@@ -37,6 +39,11 @@ var APIKEY;
     xhr.send();
   }
   if(document.querySelector(".repository-content") != null) {
+    var anchor = document.querySelector("#readme");
+    if (!anchor) { // There is no readme
+      anchor = document.querySelector(".file-wrap");
+    }
+    RECBOX = makeRecbox(anchor);
     var reponame = document.location.href.split(".com/").pop().match(/[^/]+\/[^/]+/).pop();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
@@ -85,7 +92,7 @@ function recNode(url, title, shortdesc, fulldesc, score) {
     emojinode = AOKAYNODE;
   } else if (score >= 100 && score < 1000) {
     emojinode = WOWNODE;
-  } else if (score >= 1000) {
+  } else {
     emojinode = HEARTEYESNODE;
   }
   n.innerHTML += emojinode.innerHTML;
@@ -97,19 +104,10 @@ function addrecsInside(recs) {
   var MAXNAMELEN = 20;
   var MAXDESCLEN = 42;
   recs = scoreSort(recs);
-  var anchor = document.querySelector(".contribution-activity-show-more");
-  if (!anchor) { // There is no readme
-    anchor = document.querySelector(".file-wrap");
-  }
-  var recbox = document.createElement("div");
-  var username = document.querySelector(".vcard-username").textContent;
-  recbox.id = "recbox";
-  var recflavor = document.createElement("h2");
+  RECBOX.id = "recbox";
+  var recflavor = RECBOX.querySelector("h2");
   recflavor.id = "rec-flavor-thin";
-  recflavor.textContent = "Based on " + username +"'s interests, we recommend...";
-  recbox.appendChild(recflavor);
-  recbox.classList += 'rec-group';
-  insertInside(anchor, recbox);
+  RECBOX.appendChild(recflavor);
   recs.forEach(function(rec,i) {
     if(i > MAXRECS-1) {
       return;
@@ -123,15 +121,14 @@ function addrecsInside(recs) {
     if(shortdesc.length > MAXDESCLEN) {
       shortdesc = shortdesc.slice(0,MAXDESCLEN) + "...";
     }
-    recbox.appendChild(recNode(rec.html_url, name, shortdesc, fulldesc));
+    RECBOX.appendChild(recNode(rec.html_url, name, shortdesc, fulldesc));
   });
+  RECBOX.querySelector("div.recspinner").style.display = 'none';
+  var username = document.querySelector(".vcard-username").textContent;
+  RECBOX.querySelector("h2").textContent = "Based on " + username +"'s interests, we recommend...";
 }
 
-function makeRecbox() {
-  var anchor = document.querySelector("#readme");
-  if (!anchor) { // There is no readme
-    anchor = document.querySelector(".file-wrap");
-  }
+function makeRecbox(anchor) {
   var recbox = document.createElement("div");
   recbox.id = "recbox";
   var spinner = document.createElement("div");
