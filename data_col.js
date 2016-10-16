@@ -7,7 +7,7 @@ var APIKEY;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
   xhr.addEventListener('load', function() {
-  APIKEY = xhr.responseText.trim();
+    APIKEY = xhr.responseText.trim();
   });
   xhr.send();
 })();
@@ -98,8 +98,25 @@ function get_toprepos(contrib_repos, callback){
   callback(best_repos.filter(function(e) { return !e.fork }));
 };
 
+function get_stars(username, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "https://api.github.com/users/" + username + "/starred?access_token=" + APIKEY);
+  xhr.addEventListener("load", function () {
+    if(xhr.status == 200 || xhr.status == 304) {
+      stars = JSON.parse(this.response);
+      stars = stars.map(function(repo) {
+        repo['score'] = cal_score(repo);
+        return repo;
+      });
+      callback(stars);
+    }
+  });
+  xhr.send();
+}
+
 //get contributers of a given repo name
-function get_contribs(reponame, callback){ var xhr = new XMLHttpRequest();
+function get_contribs(reponame, callback){
+  var xhr = new XMLHttpRequest();
   var contribs;
   xhr.open("GET", "https://api.github.com/repos/" + reponame + "/contributors?access_token=" + APIKEY);
   // xhr.setRequestHeader("Authentication", "token " + APIKEY);

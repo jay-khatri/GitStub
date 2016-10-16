@@ -38,7 +38,14 @@
   /*float: left;*/
 }
 
-#rec-flavor {
+#recbox h2 {
+  padding-bottom: 0.3em;
+  margin-bottom: 0.6em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #eee;
+}
+
+#rec-flavor-thin {
   margin: 0px;
   padding-bottom: 0.3em;
   margin-bottom: 0.6em;
