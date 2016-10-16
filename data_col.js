@@ -22,10 +22,10 @@ function get_lang(username, callback){
       repo_list = JSON.parse(this.response);
 			//console.log(repo_list);
 			repo_list.forEach(function(rl){
-				languages.push(rl.language);	
+				languages.push(rl.language);
 			});
 			//console.log(languages);
-			languages.forEach(function(e) { 
+			languages.forEach(function(e) {
 					if(languages_u.indexOf(e) == -1) {
 							if (e !== null){
 						   		languages_u.push(e);
@@ -84,16 +84,37 @@ function get_toprepos(contrib_repos, callback){
     //console.log(repos);
     var contrib_topscore = 0;
     var contrib_best = {};
-    repos.forEach(function(repo){
-      if (cal_score(repo) >= contrib_topscore){
-          contrib_topscore = cal_score(repo);
-          contrib_best = repo;
-      }
-    });
-    best_repos.push(contrib_best);
+    repos = repos.map(function(repo) {
+      repo['score'] = cal_score(repo);
+      return repo;
+    })
+    // repos.forEach(function(repo){
+    //   var score = cal_score(repo);
+    //   if (score >= contrib_topscore){
+    //       contrib_topscore = score;
+    //       repo['score'] = score;
+    //       contrib_best = repo;
+    //   }
+    // });
+    // best_repos.push(contrib_best);
   });
   // console.log(best_repos);
-  callback(best_repos);
+
+  best_repos = [];
+  contrib_repos.forEach(function(contrib) {
+    best_repos.push(...contrib.repos);
+  });
+  best_repos = best_repos.sort(function(a,b) {
+    if (a.score > b.score) {
+      return 1;
+    } else if (a.score < b.score) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+  console.log(best_repos);
+  callback(best_repos.filter(function(e) { return !e.fork }));
 };
 
 //get contributers of a given repo name
@@ -102,9 +123,8 @@ function get_contribs(reponame, callback){ var xhr = new XMLHttpRequest();
   xhr.open("GET", "https://api.github.com/repos/" + reponame + "/contributors?access_token=" + APIKEY);
   // xhr.setRequestHeader("Authentication", "token " + APIKEY);
   xhr.addEventListener("load", function () {
-    if(xhr.status == 200) {
+    if(xhr.status == 200 || xhr.status == 304) {
       contribs = JSON.parse(this.response);
-      // console.log(contribs);
       if(contribs.length && contribs.length > 0) {
         get_repos(contribs, callback);
       }

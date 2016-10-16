@@ -16,7 +16,7 @@ var APIKEY;
     xhr.addEventListener('load', function() {
     	APIKEY = xhr.responseText.trim();
     	get_lang(username, function(ans){
-			addrecsInside(ans);	
+			addrecsInside(ans);
 		});
     });
     xhr.send();
@@ -28,14 +28,13 @@ var APIKEY;
     xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
     xhr.addEventListener('load', function() {
       APIKEY = xhr.responseText.trim();
-    	get_contribs(reponame, function(best) {
-        	addRecs(best);
+    	get_contribs(reponame, function(repos) {
+        addRecs(repos);
       });
     });
     xhr.send();
   }
 })();
-
 
 function recNode(url, title, desc) {
   var n = document.createElement("div");
