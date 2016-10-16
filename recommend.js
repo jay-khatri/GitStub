@@ -39,7 +39,7 @@ var APIKEY;
 function recNode(url, title, desc) {
   var n = document.createElement("div");
   n.innerHTML += THUMBSNODE.innerHTML;
-  n.innerHTML += '<span itemprop="name"><a href="' + url + '" class="" data-selected-links="' + url + '" itemprop="url">' + title + '</a></span> <span class="sep"></span> <span itemprop="description">' + desc + '</span>';
+  n.innerHTML += '<div itemprop="name"><a href="' + url + '" class="" data-selected-links="' + url + '" itemprop="url">' + title + '</a></div> <div itemprop="description">' + desc + '</div>';
   return n;
 }
 

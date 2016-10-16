@@ -12,12 +12,20 @@
   border-bottom-left-radius: 3px;
 }
 
+.rec-group div {
+  width: auto;
+  margin: 0;
+}
+
 .rec-group svg {
+  display: inline-block;
   margin-right: 0.3em;
 }
 
 .rec-group [itemprop='name'] {
   /*float: left;*/
+  display: inline-block;
+  min-width: 33%;
 }
 
 .rec-group.sep {
@@ -25,7 +33,9 @@
 }
 
 .rec-group [itemprop='description'] {
-  /*float: right;*/
+  display: inline-block;
+  /*padding-left: 30px;*/
+  /*float: left;*/
 }
 
 .rec-group > h2 {
@@ -36,5 +46,6 @@
 }
 
 .rec-group > div {
+  min-width: 30%;
   margin-bottom: 0.2em;
 }
