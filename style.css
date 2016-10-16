@@ -25,7 +25,7 @@
 .rec-group [itemprop='name'] {
   /*float: left;*/
   display: inline-block;
-  min-width: 33%;
+  min-width: 28%;
 }
 
 .rec-group.sep {

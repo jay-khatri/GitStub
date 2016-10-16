@@ -10,7 +10,7 @@
     {
       "matches" : [ "*://*.github.com/*" ],
       "css" : ["style.css"],
-      "js" : ["data_col.js", "recommend.js"]
+      "js" : [ "d3.min.js", "data_col.js", "recommend.js"]
     }
   ],
   "web_accessible_resources" : [

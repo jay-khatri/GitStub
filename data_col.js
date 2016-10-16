@@ -20,11 +20,9 @@ function get_lang(username, callback){
     xhr.open("GET", "https://api.github.com/users/" + username + "/repos?access_token=" + APIKEY);
     xhr.addEventListener("load", function () {
       repo_list = JSON.parse(this.response);
-			//console.log(repo_list);
 			repo_list.forEach(function(rl){
 				languages.push(rl.language);
 			});
-			//console.log(languages);
 			languages.forEach(function(e) {
 					if(languages_u.indexOf(e) == -1) {
 							if (e !== null){
@@ -32,7 +30,6 @@ function get_lang(username, callback){
 							}
 				   	}
 		   	});
-			console.log(languages_u);
 			repo_lang(languages_u, callback);
     });
     xhr.send();
@@ -54,13 +51,10 @@ function repo_lang(languages, callback){
 				});
 			count ++;
 				if (count === languages.length){
-					console.log(parsed_results.length);
 					for(var i = 0; i < 21; i++){
 						var index = Math.floor(Math.random()*(parsed_results.length));
-						//console.log(parsed_results.length);
 						final_result.push(parsed_results[index]);
 					}
-				console.log(final_result);
 				callback(final_result);
 				return final_result;
 				}
@@ -76,29 +70,17 @@ function cal_score(repo){
 };
 
 function get_toprepos(contrib_repos, callback){
-  // console.log(contrib_repos);
   var best_repos = [];
   contrib_repos.forEach(function(contrib_repo){
     //gets only the repos from the list
     repos = contrib_repo['repos'];
-    //console.log(repos);
     var contrib_topscore = 0;
     var contrib_best = {};
     repos = repos.map(function(repo) {
       repo['score'] = cal_score(repo);
       return repo;
     })
-    // repos.forEach(function(repo){
-    //   var score = cal_score(repo);
-    //   if (score >= contrib_topscore){
-    //       contrib_topscore = score;
-    //       repo['score'] = score;
-    //       contrib_best = repo;
-    //   }
-    // });
-    // best_repos.push(contrib_best);
   });
-  // console.log(best_repos);
 
   best_repos = [];
   contrib_repos.forEach(function(contrib) {
@@ -113,7 +95,6 @@ function get_toprepos(contrib_repos, callback){
       return 0;
     }
   });
-  console.log(best_repos);
   callback(best_repos.filter(function(e) { return !e.fork }));
 };
 
@@ -154,7 +135,6 @@ function get_repos(contribs, callback){
       processed_count++;
       if (processed_count == contribs.length) {
         // done processing, do something else
-        //console.log(repos);
         get_toprepos(repos, callback);
       //here, call the new function that gives a score.
       }
