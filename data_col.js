@@ -13,18 +13,18 @@ var APIKEY;
 })();
 
 //gets a list of most popular repos with same language
-function get_lang(username){
+function get_lang(username, callback){
 	var languages = [];
 	var languages_u = [];
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.github.com/users/" + username + "/repos?access_token=" + APIKEY);
     xhr.addEventListener("load", function () {
       repo_list = JSON.parse(this.response);
-			console.log(repo_list);
+			//console.log(repo_list);
 			repo_list.forEach(function(rl){
 				languages.push(rl.language);	
 			});
-			console.log(languages);
+			//console.log(languages);
 			languages.forEach(function(e) { 
 					if(languages_u.indexOf(e) == -1) {
 							if (e !== null){
@@ -33,11 +33,41 @@ function get_lang(username){
 				   	}
 		   	});
 			console.log(languages_u);
+			repo_lang(languages_u, callback);
     });
     xhr.send();
   };
 
-
+function repo_lang(languages, callback){
+		results = [];
+		parsed_results = [];
+		final_result = [];
+		var count = 1;
+		languages.forEach(function(e){
+    		var xhr = new XMLHttpRequest();
+   		 	xhr.open("GET", "https://api.github.com/search/repositories?q=language:" + e + "&access_token=" + APIKEY);
+    		xhr.addEventListener("load", function () {
+      			search = JSON.parse(this.response);
+				results.push(search);
+				results.forEach(function(f){
+						parsed_results.push(...f['items']);
+				});
+			count ++;
+				if (count === languages.length){
+					console.log(parsed_results.length);
+					for(var i = 0; i < 21; i++){
+						var index = Math.floor(Math.random()*(parsed_results.length));
+						//console.log(parsed_results.length);
+						final_result.push(parsed_results[index]);
+					}
+				console.log(final_result);
+				callback(final_result);
+				return final_result;
+				}
+			});
+			xhr.send();
+		})
+}
 function cal_score(repo){
   fork = repo['forks_count'] * FORK_W;
   star = repo['stargazers_count'] * STAR_W;
@@ -67,8 +97,7 @@ function get_toprepos(contrib_repos, callback){
 };
 
 //get contributers of a given repo name
-function get_contribs(reponame, callback){
-  var xhr = new XMLHttpRequest();
+function get_contribs(reponame, callback){ var xhr = new XMLHttpRequest();
   var contribs;
   xhr.open("GET", "https://api.github.com/repos/" + reponame + "/contributors?access_token=" + APIKEY);
   // xhr.setRequestHeader("Authentication", "token " + APIKEY);
