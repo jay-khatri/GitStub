@@ -1,7 +1,7 @@
 # GitStub
 ## See GitHub projects related to ones you already enjoy, zero-fuss!
 
-GitStub is a Chrome extension that uses the GitHub API to create a list of recommendations of repositories related to the one being browsed by the user. Results are displayed alongside the current repo for a seamless experience.
+GitStub is a Chrome extension that uses the GitHub API to create a list of recommendations of repositories related to the one being browsed by the user. Results are displayed alongside the current repo, or in addition to a specific user profile, providing a seamless experience that helps you jump off into cool projects relevant to your interests.
 
 ![Animation of GitStub in action](http://i.imgur.com/TQQVoLj.gif)
 
