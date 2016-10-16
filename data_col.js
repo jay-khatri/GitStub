@@ -55,8 +55,13 @@ function repo_lang(languages, callback){
 						var index = Math.floor(Math.random()*(parsed_results.length));
 						final_result.push(parsed_results[index]);
 					}
-				callback(final_result);
-				return final_result;
+        var res = [];
+        final_result.forEach(function(n) {
+          if(res.indexOf(n) == -1) {
+            res.push(n);
+          }
+        });
+				callback(res);
 				}
 			});
 			xhr.send();
