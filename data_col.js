@@ -7,10 +7,36 @@ var APIKEY;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
   xhr.addEventListener('load', function() {
-    APIKEY = xhr.responseText.trim();
+  APIKEY = xhr.responseText.trim();
   });
   xhr.send();
 })();
+
+//gets a list of most popular repos with same language
+function get_lang(username){
+	var languages = [];
+	var languages_u = [];
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.github.com/users/" + username + "/repos?access_token=" + APIKEY);
+    xhr.addEventListener("load", function () {
+      repo_list = JSON.parse(this.response);
+			console.log(repo_list);
+			repo_list.forEach(function(rl){
+				languages.push(rl.language);	
+			});
+			console.log(languages);
+			languages.forEach(function(e) { 
+					if(languages_u.indexOf(e) == -1) {
+							if (e !== null){
+						   		languages_u.push(e);
+							}
+				   	}
+		   	});
+			console.log(languages_u);
+    });
+    xhr.send();
+  };
+
 
 function cal_score(repo){
   fork = repo['forks_count'] * FORK_W;

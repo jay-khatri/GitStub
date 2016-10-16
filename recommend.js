@@ -9,6 +9,15 @@ var APIKEY;
 (function() {
   if(document.querySelector("body.page-profile") != null) {
     console.log("Yo we're on a profile page");
+    var username = document.location.href.split(".com/").pop();
+	console.log(username);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
+    xhr.addEventListener('load', function() {
+    	APIKEY = xhr.responseText.trim();
+    	get_lang(username);
+    });
+    xhr.send();
   }
   if(document.querySelector(".repository-content") != null) {
     var reponame = document.location.href.split(".com/").pop().match(/[^/]+\/[^/]+/).pop();
