@@ -12,5 +12,5 @@ Created over 36 hours in October 2016 for HackRice by [Josiah Coad](https://gith
 - ```git clone https://github.com/jay-khatri/Hack-Rice```
 - Browse to `chrome://extensions`, enable development mode, and browse to the unpacked extension
 - Create a new [GitHub personal access token](https://github.com/settings/tokens/new) (no additional permissions needed - you can leave those checkboxes alone!)
-- Run `echo YOURTOKENHERE > github_APITOKEN` in the extension directory
+- Enter your token in the extension settings
 - Visit a GitHub repo or user profile and enjoy!
