@@ -23,68 +23,58 @@ var EMOJILIST = [HEARTEYESNODE, AOKAYNODE, WOWNODE];
 var RECBOX;
 
 var APIKEY;
-(function() {
+
+chrome.storage.sync.get(["GITHUB_APITOKEN"], function(items) {
+  APIKEY = items['GITHUB_APITOKEN'];
   if(document.querySelector("body.page-profile") != null) {
     var anchor = document.querySelector(".js-repo-filter");
     RECBOX = makeRecbox(anchor);
     var username = document.location.href.split(".com/").pop().match(/[^/]+/).pop();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
-    xhr.addEventListener('load', function() {
-    	APIKEY = xhr.responseText.trim();
-    	get_lang(username, function(ans){
-  			addrecsInside(ans);
-  		});
-    });
-    xhr.send();
-  }
-  if(document.querySelector(".repository-content") != null) {
+  	get_lang(username, function(ans){
+  		addrecsInside(ans);
+  	});
+  } else if(document.querySelector(".repository-content") != null) {
     var anchor = document.querySelector("#readme");
     if (!anchor) { // There is no readme
       anchor = document.querySelector(".file-wrap");
     }
     RECBOX = makeRecbox(anchor);
     var reponame = document.location.href.split(".com/").pop().match(/[^/]+\/[^/]+/).pop();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
-    xhr.addEventListener('load', function() {
-      APIKEY = xhr.responseText.trim();
-    	get_contribs(reponame, function(repos) {
-        var users = [];
-        repos.forEach(function(r) {
-          if(users.indexOf(r.owner.login) == -1) {
-            users.push(r.owner.login);
-          }
-        });
-        var stars = [];
-        var ct = 0;
-        users.forEach(function(u) {
-          get_stars(u, function(s) {
-            s = s.map(function(e) {
-              e['score'] = cal_score(e);
-              return e;
-            });
-            stars.push(...s);
-            ct++;
-            if(ct == users.length) {
-              var selectedstars = [];
-              for(var i=0; stars.length && i < NUMRANDOM; i++) {
-                selectedstars.push(...stars.splice(Math.floor(Math.random()*stars.length),1));
-              }
-              selectedstars.forEach(function(a) {
-                if(repos.indexOf(a) == -1) {
-                  repos.push(a);
-                }
-              })
-              addRecs(repos);
-            }
+
+  	get_contribs(reponame, function(repos) {
+      var users = [];
+      repos.forEach(function(r) {
+        if(users.indexOf(r.owner.login) == -1) {
+          users.push(r.owner.login);
+        }
+      });
+      var stars = [];
+      var ct = 0;
+      users.forEach(function(u) {
+        get_stars(u, function(s) {
+          s = s.map(function(e) {
+            e['score'] = cal_score(e);
+            return e;
           });
+          stars.push(...s);
+          ct++;
+          if(ct == users.length) {
+            var selectedstars = [];
+            for(var i=0; stars.length && i < NUMRANDOM; i++) {
+              selectedstars.push(...stars.splice(Math.floor(Math.random()*stars.length),1));
+            }
+            selectedstars.forEach(function(a) {
+              if(repos.indexOf(a) == -1) {
+                repos.push(a);
+              }
+            })
+            addRecs(repos);
+          }
         });
       });
     });
-    xhr.send();
   }
-})();
+});
 
 function recNode(url, title, shortdesc, fulldesc, score) {
   var n = document.createElement("div");

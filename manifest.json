@@ -2,8 +2,13 @@
   "name": "github-recommendations",
   "description": "Recommends GitHub projects",
   "version": "0.1",
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "permissions": [
     "tabs",
+    "storage",
     "*://*.github.com/*"
   ],
   "content_scripts": [
