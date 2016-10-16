@@ -20,6 +20,8 @@ WOWNODE.innerHTML = WOWSVG;
 
 var EMOJILIST = [HEARTEYESNODE, AOKAYNODE, WOWNODE];
 
+var RECBOX = makeRecbox();
+
 var APIKEY;
 (function() {
   if(document.querySelector("body.page-profile") != null) {
@@ -125,18 +127,26 @@ function addrecsInside(recs) {
   });
 }
 
-function addRecs(recs) {
-  recs = scoreSort(recs);
+function makeRecbox() {
   var anchor = document.querySelector("#readme");
   if (!anchor) { // There is no readme
     anchor = document.querySelector(".file-wrap");
   }
   var recbox = document.createElement("div");
   recbox.id = "recbox";
-  recbox.innerHTML = "<h2>You might also enjoy...</h2>";
+  var spinner = document.createElement("div");
+  spinner.classList += 'recspinner';
+  spinner.innerHTML = '<div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div>';
+
+  recbox.innerHTML = "<h2>Getting some other cool things for you...</h2>";
   recbox.classList += 'rec-group';
+  recbox.appendChild(spinner);
   insertAfter(anchor, recbox);
-  recs.forEach(function(rec,i) {
+  return recbox;
+}
+
+function addRecs(recs) {
+  scoreSort(recs).forEach(function(rec,i) {
     if(i > MAXRECS-1) {
       return;
     }
@@ -149,7 +159,9 @@ function addRecs(recs) {
     if(shortdesc.length > MAXDESCLEN) {
       shortdesc = shortdesc.slice(0,MAXDESCLEN) + "...";
     }
-    recbox.appendChild(recNode(rec.html_url, name, shortdesc, fulldesc, rec.score));
+    RECBOX.appendChild(recNode(rec.html_url, name, shortdesc, fulldesc, rec.score));
+    RECBOX.querySelector("div.recspinner").style.display = 'none';
+    RECBOX.querySelector("h2").textContent = "You might also enjoy...";
   });
 }
 
