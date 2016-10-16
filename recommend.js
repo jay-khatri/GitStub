@@ -15,7 +15,9 @@ var APIKEY;
     xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
     xhr.addEventListener('load', function() {
     	APIKEY = xhr.responseText.trim();
-    	get_lang(username);
+    	get_lang(username, function(ans){
+			addrecsInside(ans);	
+		});
     });
     xhr.send();
   }
@@ -27,7 +29,7 @@ var APIKEY;
     xhr.addEventListener('load', function() {
       APIKEY = xhr.responseText.trim();
     	get_contribs(reponame, function(best) {
-        addRecs(best);
+        	addRecs(best);
       });
     });
     xhr.send();
@@ -40,6 +42,34 @@ function recNode(url, title, desc) {
   n.innerHTML += THUMBSNODE.innerHTML;
   n.innerHTML += '<span itemprop="name"><a href="' + url + '" class="" data-selected-links="' + url + '" itemprop="url">' + title + '</a></span> <span class="sep"></span> <span itemprop="description">' + desc + '</span>';
   return n;
+}
+
+function addrecsInside(recs) {
+  recs = recs.sort(function(a,b){
+    if (a.score < b.score) {
+      return 1;
+    } else if (a.score > b.score) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+  var anchor = document.querySelector("#js-pjax-container");
+	console.log(anchor);
+  if (!anchor) { // There is no readme
+    anchor = document.querySelector(".file-wrap");
+  }
+  var recbox = document.createElement("div");
+  recbox.id = "recbox";
+  recbox.innerHTML = "<h2>You might also enjoy...</h2>";
+  recbox.classList += 'rec-group';
+  insertInside(anchor, recbox);
+  recs.forEach(function(rec,i) {
+    if(i > MAXRECS-1) {
+      return;
+    }
+    recbox.appendChild(recNode(rec.html_url, rec.full_name, rec.description != null ? rec.description : "No description available" ));
+  });
 }
 
 function addRecs(recs) {
@@ -77,6 +107,16 @@ function insertAfter(self, node) {
   if (self.nextSibling != null) {
     self.parentNode.insertBefore(node, self.nextSibling);
   } else {
+    self.parentNode.appendChild(node);
+  }
+}
+
+
+function insertInside(self, node) {
+  if (!self.parentNode) {
+    return false;
+  }
+  if (self.nextSibling != null) {
     self.parentNode.appendChild(node);
   }
 }
