@@ -2,16 +2,6 @@ var FORK_W = 5;
 var STAR_W = 5;
 var WATCH_W = 5;
 
-var APIKEY;
-(function() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', chrome.extension.getURL('github_APITOKEN'), true);
-  xhr.addEventListener('load', function() {
-    APIKEY = xhr.responseText.trim();
-  });
-  xhr.send();
-})();
-
 //gets a list of most popular repos with same language
 function get_lang(username, callback){
 	var languages = [];
