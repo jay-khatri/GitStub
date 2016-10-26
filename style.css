@@ -2,6 +2,16 @@
   margin-bottom: 10px;
 }
 
+.gitstub-warning {
+  font-weight: bold;
+  background-color: #fffccc;
+}
+
+.gitstub-error {
+  font-weight: bold;
+  background-color: #fcdede;
+}
+
 .rec-group {
   padding: 30px;
   position: relative;

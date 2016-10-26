@@ -1,7 +1,7 @@
 {
   "name": "GitStub",
   "description": "Recommends GitHub projects",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "icons" : {
     "64" : "logo64.png",
     "128" : "logo128.png"
