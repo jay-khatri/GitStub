@@ -1,3 +1,5 @@
+<a href="https://chrome.google.com/webstore/detail/gitstub/fmcbhlhaplihbpjlmplaopaifnjaaahc"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png" height="50px"></a>
+
 # GitStub
 ## See GitHub projects related to ones you already enjoy, zero-fuss!
 
@@ -12,7 +14,7 @@ Created over 36 hours in October 2016 for HackRice by [Josiah Coad](https://gith
 ## Installation
 
 ### Chrome Web Store
-Visit us [on the Web Store](https://chrome.google.com/webstore/detail/fmcbhlhaplihbpjlmplaopaifnjaaahc/publish-accepted) for easiest installation of the latest release.
+Visit us [on the Web Store](https://chrome.google.com/webstore/detail/gitstub/fmcbhlhaplihbpjlmplaopaifnjaaahc) for easiest installation of the latest release.
 
 ### Development version
 - ```git clone https://github.com/jay-khatri/GitStub```
